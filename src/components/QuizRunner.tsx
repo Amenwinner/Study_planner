@@ -156,8 +156,20 @@ export const QuizRunner: React.FC<QuizRunnerProps> = ({
         );
       }
     } catch (err: any) {
-      console.error(err);
-      alert('Could not generate custom quiz. Please try again.');
+      console.warn('API route /api/quiz/generate-custom not reachable (static host). Using existing question bank pool.');
+      const selectedDeck = decks.find((d) => d.id === selectedDeckId);
+      const pool = selectedDeck ? selectedDeck.quizQuestions : decks.flatMap((d) => d.quizQuestions);
+      const fallbackQuestions = pool.length > 0 ? [...pool].sort(() => 0.5 - Math.random()).slice(0, questionCount) : [];
+      if (fallbackQuestions.length > 0) {
+        startQuizWithQuestions(
+          fallbackQuestions,
+          targetFocus.trim() || selectedDeck?.title || 'Weekly Diagnostic Quiz',
+          selectedDeck?.course || 'Active Study',
+          selectedDeck?.weekNumber || 1
+        );
+      } else {
+        alert('No questions available in selected pool. Try selecting "All Available Decks".');
+      }
     } finally {
       setIsGeneratingCustom(false);
     }
