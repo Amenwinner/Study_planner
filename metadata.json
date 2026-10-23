@@ -1,0 +1,6 @@
+{
+  "name": "Synapse - Weekly AI Study & Quiz Engine",
+  "description": "AI-powered weekly study companion with lecture slide upload, smart flashcards, personalized quizzes, spaced repetition, and performance analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
