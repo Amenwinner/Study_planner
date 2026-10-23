@@ -15,6 +15,13 @@
   </head>
   <body class="bg-slate-950 text-slate-100 antialiased selection:bg-indigo-500 selection:text-white min-h-screen">
     <div id="root"></div>
+    <script>
+      // Automatic fallback for GitHub Pages if repo settings are set to deploy from root
+      if (window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs/') && !window.location.pathname.includes('/dist/')) {
+        var cleanPath = window.location.pathname.replace(/\/+$/, '');
+        window.location.replace(cleanPath + '/docs/' + window.location.search + window.location.hash);
+      }
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

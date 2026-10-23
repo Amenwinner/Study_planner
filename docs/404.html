@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      // Single Page App redirect for GitHub Pages
+      sessionStorage.redirect = location.href;
+      var path = window.location.pathname;
+      var base = path.substring(0, path.lastIndexOf('/') + 1);
+      window.location.replace(base);
+    </script>
+  </head>
+  <body>
+    Redirecting to app...
+  </body>
+</html>

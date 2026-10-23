@@ -2,11 +2,11 @@ name: Deploy Vite App to GitHub Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "master"]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -40,6 +40,14 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
+
+      # Also push to gh-pages branch so "Deploy from a branch" works simultaneously
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
 
   deploy:
     environment:

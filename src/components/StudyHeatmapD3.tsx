@@ -30,10 +30,11 @@ export const StudyHeatmapD3: React.FC<StudyHeatmapD3Props> = ({
   const [hoveredDay, setHoveredDay] = useState<DailyActivity | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
 
-  // Compute stats
-  const currentWeekDays = activities.filter((a) => a.weekOffset === 0);
-  const totalWeeklyInteractions = currentWeekDays.reduce((acc, a) => acc + a.totalInteractions, 0);
-  const totalWeeklyMinutes = currentWeekDays.reduce((acc, a) => acc + a.studyMinutes, 0);
+  // Compute stats defensively
+  const safeActivities = Array.isArray(activities) ? activities : [];
+  const currentWeekDays = safeActivities.filter((a) => a.weekOffset === 0);
+  const totalWeeklyInteractions = currentWeekDays.reduce((acc, a) => acc + (a.totalInteractions || 0), 0);
+  const totalWeeklyMinutes = currentWeekDays.reduce((acc, a) => acc + (a.studyMinutes || 0), 0);
   
   const peakDay = currentWeekDays.length > 0 
     ? [...currentWeekDays].sort((a, b) => b.totalInteractions - a.totalInteractions)[0]
@@ -41,7 +42,7 @@ export const StudyHeatmapD3: React.FC<StudyHeatmapD3Props> = ({
 
   // D3 Render Effect
   useEffect(() => {
-    if (!svgRef.current || activities.length === 0) return;
+    if (!svgRef.current || safeActivities.length === 0) return;
 
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove(); // Clear previous render
